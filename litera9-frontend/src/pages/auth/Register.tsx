@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import AuthCard from '../../components/AuthCard'
 
 export default function Register() {
+  const [username, setUsername] = useState('') // Menambahkan state untuk username
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
@@ -14,7 +15,7 @@ export default function Register() {
       const res = await fetch('https://pt-madding-api-production.up.railway.app/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ username, email, password }) // Kirimkan username
       })
 
       if (!res.ok) throw new Error('Gagal daftar')
@@ -32,6 +33,14 @@ export default function Register() {
         {message && (
           <p className="text-sm text-center text-green-600 mb-2">{message}</p>
         )}
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+          required
+          className="w-full border p-2 mb-3 rounded focus:outline-none"
+        />
         <input
           type="email"
           placeholder="Email"

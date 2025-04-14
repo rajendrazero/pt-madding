@@ -2,7 +2,6 @@ import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import AuthLayout from '../layouts/AuthLayout';
 import UserLayout from '../layouts/UserLayout';
 import AdminLayout from '../layouts/AdminLayout';
-import DashboardLayout from '../layouts/DashboardLayout';
 
 import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
@@ -18,8 +17,6 @@ import EditUser from '../pages/admin/EditUser';
 import DeletedUsers from '../pages/admin/DeletedUsers';
 import SearchUser from '../pages/admin/SearchUser';
 import UserList from '../pages/admin/UserList';
-
-import ProtectedRoute from '../components/ProtectedRoute';
 
 export const routes = createBrowserRouter([
   // Auth routes
@@ -37,60 +34,24 @@ export const routes = createBrowserRouter([
   // User routes
   {
     path: '/user',
-    element: <ProtectedRoute allowedRoles={['user']} />, // Perbaiki penggunaan allowedRoles
+    element: <UserLayout />,
     children: [
-      {
-        path: '',
-        element: <UserLayout />,
-        children: [
-          { index: true, element: <UserDashboard /> },
-          { path: 'profile/edit', element: <EditProfile /> },
-        ],
-      },
+      { index: true, element: <UserDashboard /> },
+      { path: 'profile', element: <UserProfile /> },
+      { path: 'profile/edit', element: <EditProfile /> },
     ],
   },
 
   // Admin routes
   {
     path: '/admin',
-    element: <ProtectedRoute allowedRoles={['admin']} />, // Perbaiki penggunaan allowedRoles
+    element: <AdminLayout />,
     children: [
-      {
-        path: '',
-        element: <AdminLayout />,
-        children: [
-          { index: true, element: <AdminDashboard /> },
-          { path: 'edit/:id', element: <EditUser /> },
-          { path: 'deleted-users', element: <DeletedUsers /> },
-          { path: 'search', element: <SearchUser /> },
-        ],
-      },
+      { index: true, element: <AdminDashboard /> },
+      { path: 'edit/:id', element: <EditUser /> },
+      { path: 'deleted-users', element: <DeletedUsers /> },
+      { path: 'search', element: <SearchUser /> },
+      { path: 'users', element: <UserList /> },
     ],
   },
-
-  // Tambahan route yang tidak boleh dihapus
-  {
-    path: '/user/profile',
-    element: (
-      <ProtectedRoute allowedRoles={['user']}> {/* Perbaiki penggunaan allowedRoles */}
-        <UserProfile />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/admin/users',
-    element: (
-      <ProtectedRoute allowedRoles={['admin']}> {/* Perbaiki penggunaan allowedRoles */}
-        <UserList />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/admin/deleted',
-    element: (
-      <ProtectedRoute allowedRoles={['admin']}> {/* Perbaiki penggunaan allowedRoles */}
-        <DeletedUsers />
-      </ProtectedRoute>
-    ),
-  },
-] as RouteObject[]);
+]);
