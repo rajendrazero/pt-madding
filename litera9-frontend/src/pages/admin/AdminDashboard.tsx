@@ -1,5 +1,5 @@
 import { useAuth } from '../../context/AuthContext'
-import DashboardLayout from '../../layout/DashboardLayout'
+import DashboardLayout from '../../layouts/DashboardLayout'
 
 export default function AdminDashboard() {
   const { user } = useAuth()

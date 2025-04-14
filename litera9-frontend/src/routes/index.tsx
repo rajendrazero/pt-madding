@@ -1,25 +1,25 @@
-import { createBrowserRouter, RouteObject } from 'react-router-dom'
-import AuthLayout from '../layouts/AuthLayout'
-import UserLayout from '../layouts/UserLayout'
-import AdminLayout from '../layouts/AdminLayout'
-import DashboardLayout from '../layouts/DashboardLayout'
+import { createBrowserRouter, RouteObject } from 'react-router-dom';
+import AuthLayout from '../layouts/AuthLayout';
+import UserLayout from '../layouts/UserLayout';
+import AdminLayout from '../layouts/AdminLayout';
+import DashboardLayout from '../layouts/DashboardLayout';
 
-import Login from '../pages/auth/Login'
-import Register from '../pages/auth/Register'
-import VerifyCode from '../pages/auth/VerifyCode'
-import Unauthorized from '../pages/auth/Unauthorized'
+import Login from '../pages/auth/Login';
+import Register from '../pages/auth/Register';
+import VerifyCode from '../pages/auth/VerifyCode';
+import Unauthorized from '../pages/auth/Unauthorized';
 
-import UserDashboard from '../pages/user/UserDashboard'
-import EditProfile from '../pages/user/EditProfile'
-import UserProfile from '../pages/user/Profile'
+import UserDashboard from '../pages/user/UserDashboard';
+import UserProfile from '../pages/user/Profile';
+import EditProfile from '../pages/user/EditProfile';
 
-import AdminDashboard from '../pages/admin/AdminDashboard'
-import EditUser from '../pages/admin/EditUser'
-import DeletedUsers from '../pages/admin/DeletedUsers'
-import SearchUser from '../pages/admin/SearchUser'
-import UserList from '../pages/admin/UserList'
+import AdminDashboard from '../pages/admin/AdminDashboard';
+import EditUser from '../pages/admin/EditUser';
+import DeletedUsers from '../pages/admin/DeletedUsers';
+import SearchUser from '../pages/admin/SearchUser';
+import UserList from '../pages/admin/UserList';
 
-import ProtectedRoute from '../components/ProtectedRoute'
+import ProtectedRoute from '../components/ProtectedRoute';
 
 export const routes = createBrowserRouter([
   // Auth routes
@@ -37,7 +37,7 @@ export const routes = createBrowserRouter([
   // User routes
   {
     path: '/user',
-    element: <ProtectedRoute allowedRoles={['user']} />,
+    element: <ProtectedRoute allowedRoles={['user']} />, // Perbaiki penggunaan allowedRoles
     children: [
       {
         path: '',
@@ -53,7 +53,7 @@ export const routes = createBrowserRouter([
   // Admin routes
   {
     path: '/admin',
-    element: <ProtectedRoute allowedRoles={['admin']} />,
+    element: <ProtectedRoute allowedRoles={['admin']} />, // Perbaiki penggunaan allowedRoles
     children: [
       {
         path: '',
@@ -72,7 +72,7 @@ export const routes = createBrowserRouter([
   {
     path: '/user/profile',
     element: (
-      <ProtectedRoute role="user">
+      <ProtectedRoute allowedRoles={['user']}> {/* Perbaiki penggunaan allowedRoles */}
         <UserProfile />
       </ProtectedRoute>
     ),
@@ -80,7 +80,7 @@ export const routes = createBrowserRouter([
   {
     path: '/admin/users',
     element: (
-      <ProtectedRoute role="admin">
+      <ProtectedRoute allowedRoles={['admin']}> {/* Perbaiki penggunaan allowedRoles */}
         <UserList />
       </ProtectedRoute>
     ),
@@ -88,9 +88,9 @@ export const routes = createBrowserRouter([
   {
     path: '/admin/deleted',
     element: (
-      <ProtectedRoute role="admin">
+      <ProtectedRoute allowedRoles={['admin']}> {/* Perbaiki penggunaan allowedRoles */}
         <DeletedUsers />
       </ProtectedRoute>
     ),
   },
-] as RouteObject[])
+] as RouteObject[]);

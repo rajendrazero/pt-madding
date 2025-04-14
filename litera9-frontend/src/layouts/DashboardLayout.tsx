@@ -1,12 +1,12 @@
-import { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
-import BottomNavbar from '../components/BottomNavbar'
+import { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import BottomNavbar from '../components/BottomNavbar';
 
-type Props = { children: ReactNode }
+type Props = { children: ReactNode };
 
 export default function DashboardLayout({ children }: Props) {
-  const { logout, user } = useAuth()
+  const { logout, user } = useAuth();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -24,5 +24,5 @@ export default function DashboardLayout({ children }: Props) {
 
       <BottomNavbar />
     </div>
-  )
+  );
 }
