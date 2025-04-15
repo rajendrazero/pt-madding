@@ -1,13 +1,17 @@
 import { ReactNode } from 'react';
 import { Outlet } from 'react-router-dom';
-import ProtectedRoute from '../components/ProtectedRoute';
+import ProtectedRoute from '../routes/ProtectedRoute';
 
-export default function UserLayout() {
+type Props = {
+  children?: ReactNode;
+};
+
+export default function UserLayout({ children }: Props) {
   return (
     <ProtectedRoute allowedRoles={['user']}>
       <div className="min-h-screen p-4">
         <h1 className="text-xl font-bold mb-4">User Area</h1>
-        <Outlet />
+        {children || <Outlet />}
       </div>
     </ProtectedRoute>
   );

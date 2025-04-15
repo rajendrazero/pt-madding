@@ -1,18 +1,25 @@
 import { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 type ProtectedRouteProps = {
   allowedRoles: string[];
-  children: ReactNode;
+  children?: ReactNode;
 };
 
-export default function ProtectedRoute({ allowedRoles, children }: ProtectedRouteProps) {
+const ProtectedRoute = ({ allowedRoles, children }: ProtectedRouteProps) => {
   const { user } = useAuth();
+  const location = useLocation();
 
-  if (!user || !allowedRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" />;
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (!allowedRoles.includes(user.role)) {
+    return <Navigate to="/unauthorized" replace />;
   }
 
   return <>{children}</>;
-}
+};
+
+export default ProtectedRoute;

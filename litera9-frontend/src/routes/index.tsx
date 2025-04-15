@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouteObject } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import AuthLayout from '../layouts/AuthLayout';
 import UserLayout from '../layouts/UserLayout';
 import AdminLayout from '../layouts/AdminLayout';
@@ -10,7 +10,7 @@ import Unauthorized from '../pages/auth/Unauthorized';
 
 import UserDashboard from '../pages/user/UserDashboard';
 import UserProfile from '../pages/user/Profile';
-import EditProfile from '../pages/user/EditProfile';
+// EditProfile dihapus
 
 import AdminDashboard from '../pages/admin/AdminDashboard';
 import EditUser from '../pages/admin/EditUser';
@@ -38,7 +38,7 @@ export const routes = createBrowserRouter([
     children: [
       { index: true, element: <UserDashboard /> },
       { path: 'profile', element: <UserProfile /> },
-      { path: 'profile/edit', element: <EditProfile /> },
+      // Baris ini dihapus: { path: 'profile/edit', element: <EditProfile /> },
     ],
   },
 
