@@ -1,69 +1,79 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import AuthCard from '../../components/AuthCard';
+import { useLoading } from '../../context/LoadingContext';
+import axios from '../../api/axios';
 
 export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const { login } = useAuth()
-  const navigate = useNavigate()
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const { login } = useAuth();
+  const { loading, setLoading } = useLoading();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const res = await fetch('https://pt-madding-api-production.up.railway.app/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      })
+      setLoading(true);
+      setError('');
 
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Login gagal')
+      const { data } = await axios.post('/auth/login', { email, password });
 
-      login(data.accessToken)
+      login(data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
 
-      // Jika ingin menyimpan refreshToken untuk refresh otomatis:
-      localStorage.setItem('refreshToken', data.refreshToken)
-
-      const userRole = data.user?.role || 'user'
-
-      if (userRole === 'admin') {
-        navigate('/admin')
-      } else {
-        navigate('/user')
-      }
+      const userRole = data.user?.role || 'user';
+      navigate(userRole === 'admin' ? '/admin' : '/user');
     } catch (err: any) {
-      setError(err.message || 'Terjadi kesalahan.')
+      const errMsg = err.response?.data?.error || 'Login gagal';
+      setError(errMsg);
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
-      <h2 className="text-2xl font-bold text-center">Login</h2>
-      {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-        className="w-full border p-2 rounded"
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-        className="w-full border p-2 rounded"
-        required
-      />
-      <button
-        type="submit"
-        className="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded"
-      >
-        Masuk
-      </button>
-    </form>
-  )
+    <AuthCard title="Masuk" icon={<i className="fas fa-sign-in-alt text-blue-600 text-2xl"></i>}>
+      <form onSubmit={handleSubmit} className="w-full max-w-md">
+        {error && <p className="text-sm text-center text-red-600 mb-4">{error}</p>}
+
+        <div className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="mt-6 w-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white py-2 rounded-xl font-semibold transition duration-300 disabled:opacity-60"
+        >
+          {loading ? (
+            <div className="flex justify-center items-center gap-2">
+              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              Memproses...
+            </div>
+          ) : (
+            'Masuk'
+          )}
+        </button>
+      </form>
+    </AuthCard>
+  );
 }

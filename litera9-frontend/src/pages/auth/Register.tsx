@@ -27,7 +27,7 @@ export default function Register() {
     try {
       setLoading(true);
       setMessage('');
-      await axios.post('/api/auth/register', { username, email, password });
+      await axios.post('/auth/register', { username, email, password });
       setMessage('Kode verifikasi telah dikirim ke email.');
       setTimeout(() => navigate('/verify-code?email=' + encodeURIComponent(email)), 1500);
     } catch (err: any) {

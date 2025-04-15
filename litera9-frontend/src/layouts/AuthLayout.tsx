@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
+import clsx from 'clsx';
 
+// AuthLayout
 export default function AuthLayout() {
   const location = useLocation();
 
@@ -10,20 +12,18 @@ export default function AuthLayout() {
     }
   }, [location]);
 
+  // Menambahkan tipe untuk path
+  const isActive = (path: string): boolean => location.pathname === path;
+
   return (
     <div className="h-screen flex flex-col bg-gradient-to-br from-indigo-100 via-blue-100 to-white transition-colors duration-300">
       {/* Navbar */}
       <nav className="flex items-center justify-between px-4 py-3 bg-white/80 backdrop-blur-md shadow-sm">
         <div className="flex items-center gap-4 text-sm">
-          <Link to="/" className="flex items-center gap-1 text-indigo-600 font-medium">
-            <i data-feather="home" className="w-4 h-4"></i> Home
-          </Link>
-          <Link to="/register" className="flex items-center gap-1 text-indigo-600">
-            <i data-feather="user-plus" className="w-4 h-4"></i> Register
-          </Link>
-          <Link to="/login" className="flex items-center gap-1 text-indigo-600">
-            <i data-feather="log-in" className="w-4 h-4"></i> Login
-          </Link>
+          {/* Menambahkan tipe pada komponen NavLink */}
+          <NavLink to="/" icon="home" label="Home" active={isActive('/')} />
+          <NavLink to="/register" icon="user-plus" label="Register" active={isActive('/register')} />
+          <NavLink to="/login" icon="log-in" label="Login" active={isActive('/login')} />
         </div>
 
         {/* Icon tambahan di kanan navbar */}
@@ -32,12 +32,34 @@ export default function AuthLayout() {
         </div>
       </nav>
 
-      {/* Full height content minus navbar */}
+      {/* Content Area */}
       <div className="flex-grow flex items-center justify-center">
         <div className="w-full h-full max-w-md p-4 flex items-center justify-center">
           <Outlet />
         </div>
       </div>
     </div>
+  );
+}
+
+// Komponen NavLink dengan interaktivitas
+type NavLinkProps = {
+  to: string;
+  icon: string;  // Menentukan tipe untuk icon, bisa berupa nama icon string
+  label: string;
+  active: boolean;
+};
+
+function NavLink({ to, icon, label, active }: NavLinkProps) {
+  return (
+    <Link
+      to={to}
+      className={clsx(
+        'flex items-center gap-1 font-medium transition-colors duration-200',
+        active ? 'text-indigo-700' : 'text-indigo-500 hover:text-indigo-700'
+      )}
+    >
+      <i data-feather={icon} className="w-4 h-4"></i> {label}
+    </Link>
   );
 }
