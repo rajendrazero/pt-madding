@@ -1,4 +1,4 @@
-import { useAuth } from '../../context/AuthContext'
+import React, { useAuth } from '../../context/AuthContext'
 import DashboardLayout from '../../layouts/DashboardLayout'
 import { useState } from 'react'
 import axios from 'axios'

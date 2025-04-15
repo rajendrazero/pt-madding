@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 import AuthCard from '../../components/AuthCard'
 
 export default function Register() {
-  const [username, setUsername] = useState('') // Menambahkan state untuk username
+  const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
@@ -12,18 +13,18 @@ export default function Register() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const res = await fetch('https://pt-madding-api-production.up.railway.app/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password }) // Kirimkan username
+      const res = await axios.post('https://pt-madding-api-production.up.railway.app/api/auth/register', {
+        username, email, password
       })
+      
+      console.log('Respon:', res.data)
 
-      if (!res.ok) throw new Error('Gagal daftar')
-
+      // Kalau backend kasih status 200/201 otomatis dianggap sukses
       setMessage('Kode verifikasi telah dikirim ke email.')
       setTimeout(() => navigate('/verify-code?email=' + encodeURIComponent(email)), 1500)
-    } catch (err) {
+    } catch (err: any) {
       setMessage('Gagal mendaftar. Coba lagi.')
+      console.error(err)
     }
   }
 
