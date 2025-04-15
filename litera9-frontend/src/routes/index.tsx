@@ -10,7 +10,6 @@ import Unauthorized from '../pages/auth/Unauthorized';
 
 import UserDashboard from '../pages/user/UserDashboard';
 import UserProfile from '../pages/user/Profile';
-// EditProfile dihapus
 
 import AdminDashboard from '../pages/admin/AdminDashboard';
 import EditUser from '../pages/admin/EditUser';
@@ -18,15 +17,39 @@ import DeletedUsers from '../pages/admin/DeletedUsers';
 import SearchUser from '../pages/admin/SearchUser';
 import UserList from '../pages/admin/UserList';
 
+// Impor AuthRedirectRoute dari file baru
+import AuthRedirectRoute from './AuthRedirectRoute';
+
 export const routes = createBrowserRouter([
   // Auth routes
   {
     path: '/',
     element: <AuthLayout />,
     children: [
-      { path: 'login', element: <Login /> },
-      { path: 'register', element: <Register /> },
-      { path: 'verify-code', element: <VerifyCode /> },
+      {
+        path: 'login',
+        element: (
+          <AuthRedirectRoute>
+            <Login />
+          </AuthRedirectRoute>
+        ),
+      },
+      {
+        path: 'register',
+        element: (
+          <AuthRedirectRoute>
+            <Register />
+          </AuthRedirectRoute>
+        ),
+      },
+      {
+        path: 'verify-code',
+        element: (
+          <AuthRedirectRoute>
+            <VerifyCode />
+          </AuthRedirectRoute>
+        ),
+      },
       { path: 'unauthorized', element: <Unauthorized /> },
     ],
   },
@@ -38,7 +61,6 @@ export const routes = createBrowserRouter([
     children: [
       { index: true, element: <UserDashboard /> },
       { path: 'profile', element: <UserProfile /> },
-      // Baris ini dihapus: { path: 'profile/edit', element: <EditProfile /> },
     ],
   },
 
