@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import DashboardLayout from "../../layouts/DashboardLayout";
-import axios from 'axios'
+import axios from '../../api/axios'; 
 import { useAuth } from '../../context/AuthContext'
 
 type User = {

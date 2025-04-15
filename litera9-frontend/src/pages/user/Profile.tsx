@@ -1,7 +1,7 @@
 import { useAuth } from '../../context/AuthContext'
 import DashboardLayout from '../../layouts/DashboardLayout'
 import { useState } from 'react'
-import axios from 'axios'
+import axios from '../../api/axios'; 
 
 export default function Profile() {
   const { user, token, setUser } = useAuth()
