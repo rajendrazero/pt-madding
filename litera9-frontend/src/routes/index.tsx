@@ -10,6 +10,7 @@ import Unauthorized from '../pages/auth/Unauthorized';
 
 import UserDashboard from '../pages/user/UserDashboard';
 import UserProfile from '../pages/user/Profile';
+import EditProfile from '../pages/user/EditProfile';
 
 import AdminDashboard from '../pages/admin/AdminDashboard';
 import EditUser from '../pages/admin/EditUser';
@@ -56,17 +57,18 @@ export const routes = createBrowserRouter([
 
   // User routes
   {
-    path: '/user',
-    element: (
-      <ProtectedRoute allowedRoles={['user', 'admin']}>
-        <UserLayout />
-      </ProtectedRoute>
-    ),
-    children: [
-      { index: true, element: <UserDashboard /> },
-      { path: 'profile', element: <UserProfile /> },
-    ],
-  },
+  path: '/user',
+  element: (
+    <ProtectedRoute allowedRoles={['user', 'admin']}>
+      <UserLayout />
+    </ProtectedRoute>
+  ),
+  children: [
+    { index: true, element: <UserDashboard /> },
+    { path: 'profile', element: <UserProfile /> },
+    { path: 'profile/edit', element: <EditProfile /> }, 
+  ],
+},
 
   // Admin routes
   {
