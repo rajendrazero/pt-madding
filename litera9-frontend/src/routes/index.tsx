@@ -17,8 +17,8 @@ import DeletedUsers from '../pages/admin/DeletedUsers';
 import SearchUser from '../pages/admin/SearchUser';
 import UserList from '../pages/admin/UserList';
 
-// Impor AuthRedirectRoute dari file baru
 import AuthRedirectRoute from './AuthRedirectRoute';
+import ProtectedRoute from './ProtectedRoute';
 
 export const routes = createBrowserRouter([
   // Auth routes
@@ -57,7 +57,11 @@ export const routes = createBrowserRouter([
   // User routes
   {
     path: '/user',
-    element: <UserLayout />,
+    element: (
+      <ProtectedRoute allowedRoles={['user', 'admin']}>
+        <UserLayout />
+      </ProtectedRoute>
+    ),
     children: [
       { index: true, element: <UserDashboard /> },
       { path: 'profile', element: <UserProfile /> },
@@ -67,7 +71,11 @@ export const routes = createBrowserRouter([
   // Admin routes
   {
     path: '/admin',
-    element: <AdminLayout />,
+    element: (
+      <ProtectedRoute allowedRoles={['admin']}>
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
     children: [
       { index: true, element: <AdminDashboard /> },
       { path: 'edit/:id', element: <EditUser /> },
