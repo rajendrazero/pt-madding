@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Generate DOCX</title>
+        <!-- pakai versi stabil docx 7.7.0 -->
+        <script src="https://unpkg.com/docx@7.7.0/build/index.umd.js"></script>
+    </head>
+    <body>
+        <h2>Generate List Pengisi Acara (.docx)</h2>
+        <button id="gen">Download .docx</button>
+
+        <script>
+            const data = [
+                ["No", "Nama Lengkap", "Kelas", "Guru Pendamping"],
+                ["1", "Gadiza Firsty Arroyan", "X RPL 4", "Bu Eva (IPAS)"],
+                ["2", "Dhiny Alifia", "X RPL 4", "Bu Eva (IPAS)"],
+                ["3", "Aurelia Giza Humairoh", "X RPL 4", "Bu Eva (IPAS)"],
+                ["4", "Farhan Alfarisi", "X RPL 4", "Bu Eva (IPAS)"],
+                ["5", "Faldo Febiano", "X RPL 3", "Pak Herbet (DP)"],
+                ["6", "Faiz Al Dino", "X PSPT 2", "Bu Khairani (Agama)"],
+                [
+                    "7",
+                    "Raziq Andra Prasetya",
+                    "XI RPL 4",
+                    "Ma’am Aina (B. Inggris)"
+                ],
+                ["8", "Zulaikha Arifah", "X PSPT 1", "Umi Maharani (Agama)"],
+                ["9", "Farand Altaf Emian", "XI RPL 3", "Pak Ardiansyah S.T"],
+                [
+                    "10",
+                    "Muhammad Fathan Al Aziz",
+                    "XI RPL 3",
+                    "Pak Ardiansyah S.T"
+                ],
+                ["11", "Fibi Khutsar", "XI RPL 4", "Ma’am Aina (B. Inggris)"],
+                ["12", "Nayla Putri", "X DKV 3", "Pak Iqbal (IPAS)"],
+                ["13", "Meliza Azani", "X DKV 3", "Pak Iqbal (IPAS)"],
+                ["14", "Khaira Ramadani", "X DKV 2", "Bu Jumaya (B. Indo)"],
+                ["15", "Lovianna", "X DKV 2", "Bu Jumaya (B. Indo)"],
+                ["16", "M. Fikri Kurniawan", "X DKV 2", "Bu Jumaya (B. Indo)"],
+                ["17", "Natasya Ramzi Putri", "X DKV 2", "Bu Jumaya (B. Indo)"],
+                ["18", "Saskia Ramadhani", "X DKV 2", "Bu Jumaya (B. Indo)"],
+                [
+                    "19",
+                    "Raihanah Fitri Lubis",
+                    "X DKV 2",
+                    "Bu Jumaya (B. Indo)"
+                ],
+                ["20", "Najwa Hencika", "X DKV 2", "Bu Jumaya (B. Indo)"],
+                ["21", "Fahral Al Falaq", "XII DKV 3", "Pak Sandi (Produktif)"],
+                ["22", "Tania Asyafira", "X DKV 2", "Bu Jumaya (B. Indo)"],
+                ["23", "Bian Cinta Almoza", "X DKV 2", "Bu Jumaya (B. Indo)"],
+                ["24", "Syahrina Amelia", "X PS 3", "Bu Sinta (Informatika)"]
+            ];
+
+            function makeCell(docx, text, bold = false) {
+                return new docx.TableCell({
+                    width: { size: 25, type: docx.WidthType.PERCENTAGE },
+                    children: [
+                        new docx.Paragraph({
+                            children: [new docx.TextRun({ text, bold })]
+                        })
+                    ]
+                });
+            }
+
+            document
+                .getElementById("gen")
+                .addEventListener("click", async () => {
+                    const d = window.docx; // ambil lib
+
+                    // bikin tabel
+                    const rows = data.map((r, idx) => {
+                        return new d.TableRow({
+                            children: r.map(c => makeCell(d, c, idx === 0))
+                        });
+                    });
+
+                    const table = new d.Table({
+                        rows,
+                        width: { size: 100, type: d.WidthType.PERCENTAGE }
+                    });
+
+                    // bikin dokumen
+                    const doc = new d.Document({
+                        sections: [
+                            {
+                                children: [
+                                    new d.Paragraph({
+                                        text: "List Pengisi Acara Yang Masuk Pagi",
+                                        heading: "Heading1"
+                                    }),
+                                    new d.Paragraph({
+                                        text: "Mohon isi listnya ya 🙏🏼",
+                                        spacing: { after: 200 }
+                                    }),
+                                    table
+                                ]
+                            }
+                        ]
+                    });
+
+                    // download docx
+                    const blob = await d.Packer.toBlob(doc);
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "List_Pengisi_Acara_Pagi.docx";
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    URL.revokeObjectURL(url);
+                });
+        </script>
+    </body>
+</html>
